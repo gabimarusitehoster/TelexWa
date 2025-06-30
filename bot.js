@@ -1,4 +1,3 @@
-
 const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs');
 const path = require('path');
@@ -25,8 +24,9 @@ bot.onText(/\/startpair (\d+)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const phoneNumber = match[1];
 
-  if (!userFollowsChannel(chatId)) {
-    return bot.sendMessage(chatId, 'Please follow the required channel.');
+  const follows = await userFollowsChannel(chatId);
+  if (!follows) {
+    return bot.sendMessage(chatId, `🚫 Please follow ${CHANNEL_USERNAME} to use this bot.`);
   }
 
   const status = (text) => bot.sendMessage(chatId, text);
@@ -37,7 +37,7 @@ bot.onText(/\/startpair (\d+)/, async (msg, match) => {
   await startSession(phoneNumber, chatId, status, onMessage);
 });
 
-bot.onText(/\/delpair (\d+)/, (msg, match) => {
+bot.onText(/\/delpair (\d+)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const phoneNumber = match[1];
   const sessionPath = path.join(__dirname, 'tmp', `session_${phoneNumber}`);
@@ -51,12 +51,21 @@ bot.onText(/\/delpair (\d+)/, (msg, match) => {
   }
 });
 
-bot.onText(/\/list/, (msg) => {
+bot.onText(/\/list/, async (msg) => {
   const chatId = msg.chat.id;
+
+  const follows = await userFollowsChannel(chatId);
+  if (!follows) {
+    return bot.sendMessage(chatId, `🚫 Please follow ${CHANNEL_USERNAME} to use this bot.`);
+  }
+
   const list = sessionStore.list(chatId);
   if (!list.length) return bot.sendMessage(chatId, `No sessions found.`);
+
   let text = '📱 Your sessions:\n\n' + list.map(u => `${u.phoneNumber} (Uptime: ${Math.floor((Date.now() - u.connectedAt) / 1000)}s)`).join('\n');
   bot.sendMessage(chatId, text);
 });
 
 console.log("✅ Telegram bot running...");
+
+module.exports = { bot };
