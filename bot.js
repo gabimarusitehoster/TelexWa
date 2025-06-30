@@ -8,9 +8,17 @@ const config = require('./config.json');
 
 const bot = new TelegramBot(config.BOT_TOKEN, { polling: true });
 
-function userFollowsChannel(chatId) {
-  // Implement actual Telegram API check if needed
-  return true; // for now assume true
+const CHANNEL_USERNAME = '@gabimarutechchannel'; 
+
+async function userFollowsChannel(userId) {
+  try {
+    const res = await bot.getChatMember(CHANNEL_USERNAME, userId);
+    const validStatuses = ['member', 'administrator', 'creator'];
+    return validStatuses.includes(res.status);
+  } catch (err) {
+    console.error(`Error checking membership for ${userId} in ${CHANNEL_USERNAME}:`, err.message);
+    return false;
+  }
 }
 
 bot.onText(/\/startpair (\d+)/, async (msg, match) => {
