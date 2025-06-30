@@ -4,7 +4,7 @@
   "main": "bot.js",
   "scripts": { "start": "node bot.js" },
   "dependencies": {
-    "@adiwajshing/baileys": "^6.5.0",
+    "@adiwajshing/baileys": "github:seiren-primrose/PL-Baileys",
     "node-telegram-bot-api": "^0.61.0",
     "pino": "^8.14.1",
     "moment-timezone": "^0.5.43",
