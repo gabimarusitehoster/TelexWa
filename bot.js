@@ -20,6 +20,17 @@ async function userFollowsChannel(userId) {
   }
 }
 
+bot.onText(/\/start/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const phoneNumber = match[1];
+
+  const follows = await userFollowsChannel(chatId);
+  if (!follows) {
+    return bot.sendMessage(chatId, `🚫 Please follow ${CHANNEL_USERNAME} to use this bot.`);
+  }
+  return bot.sendMessage(chatId, `Viper X Menu\n\n¢ /startpair\n¢ /list\n¢ /delpair`);
+});
+
 bot.onText(/\/startpair (\d+)/, async (msg, match) => {
   const chatId = msg.chat.id;
   const phoneNumber = match[1];
@@ -29,9 +40,11 @@ bot.onText(/\/startpair (\d+)/, async (msg, match) => {
     return bot.sendMessage(chatId, `🚫 Please follow ${CHANNEL_USERNAME} to use this bot.`);
   }
 
-  const status = (text) => bot.sendMessage(chatId, text);
-  const onMessage = (conn, msg) => {
-    console.log(`[WA:${phoneNumber}]`, msg);
+  const status = (text) =>
+    bot.sendMessage(chatId, text, { parse_mode: 'Markdown' });
+
+  const onMessage = (conn, waMsg) => {
+    console.log(`[WA:${phoneNumber}]`, waMsg);
   };
 
   await startSession(phoneNumber, chatId, status, onMessage);

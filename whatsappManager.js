@@ -59,9 +59,9 @@ Need a new code? Use \`/delpair ${phoneNumber}\` then request again.
 
 _— Gabimaru WA Bot_ 🐉
         `.trim();
-        bot.sendMessage(telegramChatId, pairText, { parse_mode: 'Markdown' });
+        onStatus(pairText);
         console.log(`[${phoneNumber}] Pairing Code Sent: ${code}`);
-      }, 3000);
+      }, 1000);
     }
   }
 
