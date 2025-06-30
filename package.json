@@ -1,0 +1,14 @@
+{
+  "name": "telexwa",
+  "version": "1.0.0",
+  "main": "bot.js",
+  "scripts": { "start": "node bot.js" },
+  "dependencies": {
+    "@adiwajshing/baileys": "^6.5.0",
+    "node-telegram-bot-api": "^0.61.0",
+    "pino": "^8.14.1",
+    "moment-timezone": "^0.5.43",
+    "performance-now": "^2.1.0",
+    "node-cache": "^5.1.2"
+  }
+}
